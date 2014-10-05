@@ -9,7 +9,7 @@
 
 Trick question. It's not a thing. It's this guy:
 
-![](http://yeoman.io/assets/img/yeoman-003.29e3.png)
+<img src="http://yeoman.io/assets/img/yeoman-003.29e3.png" width="200" />
 
 Basically, he wears a top hat, lives in your computer, and waits for you to tell him what kind of software you wish to create.
 
