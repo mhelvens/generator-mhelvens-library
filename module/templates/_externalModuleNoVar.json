@@ -1,0 +1,4 @@
+{
+	"external": true,
+	"name": "<%= name %>"
+}

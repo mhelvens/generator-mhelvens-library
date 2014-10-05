@@ -1,0 +1,4 @@
+{
+	"name": "<%= name %>",
+	"file": "<%= name %>.js"
+}
