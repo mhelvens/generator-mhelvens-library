@@ -6,7 +6,6 @@
     <file url="file://$PROJECT_DIR$/../apinatomy-core/example/example.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/../apinatomy-core/gulpfile.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/../apinatomy-core/modules/fma-model.json" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/../apinatomy-core/src/p-connectivity.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/../apinatomy-core/src/p-tile-click-to-open.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/index.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/templates/_.editorconfig" charset="UTF-8" />
@@ -17,11 +16,7 @@
     <file url="file://$PROJECT_DIR$/app/templates/_package.json" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/module/index.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/module/templates/_behavior.js" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/module/templates/_packages.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/module/templates/_style.scss" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/../js-delta/.yo-rc.json" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/../js-delta/gulpfile.js" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/../js-delta/packages.js" charset="UTF-8" />
   </component>
 </project>
 
