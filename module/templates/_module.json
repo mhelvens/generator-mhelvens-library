@@ -1,4 +1,5 @@
 {
+    "type": "internal-library",
 	"name": "<%= name %>",
 	"file": "<%= name %>.js"
 }

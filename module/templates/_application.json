@@ -1,0 +1,6 @@
+{
+  	"type": "application",
+	"name": "<%= name %>",
+	"file": "<%= name %>.js",
+	"dir": "<%= name %>"
+}
