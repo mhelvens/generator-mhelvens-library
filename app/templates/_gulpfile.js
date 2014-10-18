@@ -1,4 +1,5 @@
 var fs = require('fs');
+var _ = require('lodash');
 var gulp = require('gulp'),
 	gutil = require('gulp-util'),
 	jshint = require('gulp-jshint'),
@@ -6,11 +7,27 @@ var gulp = require('gulp'),
 	webpack = require('webpack'),
 	uglify = require('gulp-uglify'),
 	rename = require('gulp-rename'),
-	sass = require('gulp-sass'),
 	karma = require('gulp-karma'),
 	rimraf = require('rimraf'),
 	sourcemaps = require('gulp-sourcemaps'),
 	bump = require('gulp-bump');
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//
+// this list tells Webpack where to find specific package files
+// relative to 'node_modules' and 'bower_components' and should
+// be expanded when necessary
+//
+var WEBPACK_ALIAS = {
+	'jquery': 'jquery/dist/jquery.js',
+	'js-graph': 'js-graph/dist/js-graph.js',
+	'bluebird': 'bluebird/js/main/bluebird.js',
+	'chroma-js': 'chroma-js/chroma.js',
+	'd3': 'd3/d3.js',
+	'three-js': 'three.js/three.js',
+	'lodash': 'lodash/dist/lodash.min.js'
+};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -72,15 +89,27 @@ gulp.task('copy-non-js-files', ['clean-tmp'], function () {
 });
 
 MODULES.forEach(function (m) {
-	//
 	// see all MODULES as external to each other
-	//
 	var ownExternals = [];
 	MODULES.forEach(function (mExt) {
 		if (mExt !== m) {
 			ownExternals.push(externalModule('./' + mExt.file));
 		}
 	});
+
+	// Webpack configuration shared for both apps and libraries
+	var commonConfig = {
+		devtool: 'inline-source-map',
+		module: {
+			preLoaders: [
+				{ test: /\/(?!addStyles)[^\/]+\.js$/, loader: "source-map" }
+			],
+			loaders: [
+				{ test: /\.scss$/, loader: "style!css!autoprefixer!sass" }
+			]
+		}
+	};
+
 	gulp.task('webpack:' + m.name, ['traceur', 'copy-non-js-files'], function (callback) {
 		// output after Webpack does its thing
 		function webpackCallback(err, stats) {
@@ -90,53 +119,33 @@ MODULES.forEach(function (m) {
 		}
 
 		if (m.type === 'internal-library') {
-			webpack({
-				devtool: 'inline-source-map',
+			webpack(_.defaults({
 				entry: './.intermediate-output/' + m.file,
+				externals: EXTERNAL_MODULES.concat(ownExternals),
 				output: {
 					path: './dist',
 					filename: m.file,
 					libraryTarget: 'umd',
 					sourceMapFilename: m.file+'.map'
-				},
-				externals: EXTERNAL_MODULES.concat(ownExternals),
-				module: {
-					preLoaders: [
-						{ test: /\/(?!addStyles)[^\/]+\.js$/, loader: "source-map" }
-					],
-					loaders: [
-						{ test: /\.scss$/, loader: "style!css!autoprefixer!sass" }
-					]
 				}
-			}, webpackCallback);
+			}, commonConfig), webpackCallback);
 		} else if (m.type === 'application') {
-			webpack({
-				devtool: 'inline-source-map',
+			webpack(_.defaults({
 				entry: './.intermediate-output/' + m.dir + '/' + m.file,
 				output: {
 					path: './dist/' + m.dir,
 					filename: m.file,
 					sourceMapFilename: m.file+'.map'
 				},
-				externals: EXTERNAL_MODULES.concat(ownExternals),
-				module: {
-					preLoaders: [
-						{ test: /\/(?!addStyles)[^\/]+\.js$/, loader: "source-map" }
-					],
-					loaders: [
-						{ test: /\.scss$/, loader: "style!css!autoprefixer!sass" }
-					]
-				}
-			}, webpackCallback);
+				resolve: {
+					modulesDirectories: ['node_modules', 'bower_components'],
+					alias: WEBPACK_ALIAS
+				},
+				target: 'web'
+			}, commonConfig), webpackCallback);
 		}
 	});
-	if (m.type === 'application') {
-		gulp.task('copy-html:' + m.name, function () {
-			return gulp.src(['src/' + m.dir + '/*.html'])
-				.pipe(gulp.dest('dist/' + m.dir));
-		});
-		gulp.task('build:' + m.name, ['webpack:' + m.name, 'copy-html:' + m.name]);
-	} else {
+	if (m.type === 'internal-library') {
 		gulp.task('uglify:' + m.name, ['webpack:' + m.name], function () {
 			return gulp.src('dist/**/' + m.file)
 				.pipe(uglify())
@@ -144,6 +153,12 @@ MODULES.forEach(function (m) {
 				.pipe(gulp.dest('dist'));
 		});
 		gulp.task('build:' + m.name, ['webpack:' + m.name, 'uglify:' + m.name]);
+	} else if (m.type === 'application') {
+		gulp.task('copy-html:' + m.name, function () {
+			return gulp.src(['src/' + m.dir + '/*.html'])
+				.pipe(gulp.dest('dist/' + m.dir));
+		});
+		gulp.task('build:' + m.name, ['webpack:' + m.name, 'copy-html:' + m.name]);
 	}
 });
 
