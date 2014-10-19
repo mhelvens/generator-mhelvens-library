@@ -125,6 +125,7 @@ MODULES.forEach(function (m) {
 				output: {
 					path: './dist',
 					filename: m.file,
+					library: m.var,
 					libraryTarget: 'umd',
 					sourceMapFilename: m.file+'.map'
 				}

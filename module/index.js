@@ -74,6 +74,12 @@ var MhelvensLibraryGenerator = yeoman.generators.Base.extend({
 				name: "variableName",
 				message: "Which (if any) variable does it export?",
 				default: null
+			},
+			{
+				when: function (answers) { return answers.type === 'internal-library' },
+				name: "variableName",
+				message: "Which (if any) variable should it export?",
+				default: null
 			}
 		], function (answers) {
 			_(this.context).extend(answers);
@@ -82,9 +88,11 @@ var MhelvensLibraryGenerator = yeoman.generators.Base.extend({
 	},
 
 	writing: function () {
-		console.log(this.context.type);
 		switch (this.context.type) {
 			case 'internal-library': {
+				var template = this.context.variableName ?
+					'_module.json' :
+					'_moduleNoVar.json';
 				this.template('_module.json', 'modules/' + this.context.name + '.json', this.context);
 				this.template('_behavior.js', 'src/' + this.context.name + '.js', this.context);
 				this.template('_style.scss', 'src/' + this.context.name + '.scss', this.context);
