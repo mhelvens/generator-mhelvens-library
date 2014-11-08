@@ -1,6 +1,8 @@
 {
     "type": "internal-library",
 	"name": "<%= name %>",
-	"file": "<%= name %>.js",
-	"var": "<%= variableName %>"
+	"file": "<%= name %>.js"
+	<% if (typeof variableName !== 'undefined') { %>
+		, "var": "<%= variableName %>"
+	<% } %>
 }

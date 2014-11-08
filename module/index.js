@@ -90,18 +90,33 @@ var MhelvensLibraryGenerator = yeoman.generators.Base.extend({
 	writing: function () {
 		switch (this.context.type) {
 			case 'internal-library': {
-				var template = this.context.variableName ?
-					'_module.json' :
-					'_moduleNoVar.json';
 				this.template('_module.json', 'modules/' + this.context.name + '.json', this.context);
 				this.template('_behavior.js', 'src/' + this.context.name + '.js', this.context);
 				this.template('_style.scss', 'src/' + this.context.name + '.scss', this.context);
 			} break;
 			case 'external-library': {
-				var template = this.context.variableName ?
-					'_externalModule.json' :
-					'_externalModuleNoVar.json';
-				this.template(template, 'modules/' + this.context.name + '.json', this.context);
+				var done = this.async();
+
+				/* install the external library */
+				this.bowerInstall([this.context.name], { 'save': true }, function () {
+
+					/* ask the developer for the path to the library file */
+					this.prompt([
+						{
+							name: "path",
+							message: "What's the relative path to the library file?"
+						}
+					], function (answers) {
+
+						/* create module file */
+						var i = answers.path.lastIndexOf('/');
+						this.context.dir = this.context.name + '/' + answers.path.substring(0, i);
+						this.context.file = answers.path.substring(i+1);
+						this.template('_externalModule.json', 'modules/' + this.context.name + '.json', this.context);
+						done();
+
+					}.bind(this));
+				}.bind(this));
 			} break;
 			case 'application': {
 				this.template('_application.json', 'modules/' + this.context.name + '.json', this.context);

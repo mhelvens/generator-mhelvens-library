@@ -1,6 +1,9 @@
 {
-    "type": "external-library",
-	"external": true,
-	"name": "<%= name %>",
-	"var": "<%= variableName %>"
+  "type": "external-library",
+  "name": "<%= name %>",
+  "dir": "<%= dir %>",
+  "file": "<%= file %>"
+  <% if (typeof variableName !== 'undefined') { %>
+      , "var": "<%= variableName %>"
+  <% } %>
 }

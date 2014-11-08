@@ -1,5 +1,0 @@
-{
-    "type": "external-library",
-	"external": true,
-	"name": "<%= name %>"
-}
