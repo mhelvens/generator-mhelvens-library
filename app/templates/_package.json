@@ -14,13 +14,14 @@
 
 	"dependencies": {
 
-		"bluebird": "^2.3.2"
-
 	},
 
 	"devDependencies": {
 
+		"generator-mhelvens-library": "*",
+
 		"bower": "^1.3.10",
+		"lodash": "^2.4.1",
 
 		"gulp": "^3.8.7",
 		"gulp-util": "^3.0.1",
@@ -40,6 +41,8 @@
 		"css-loader": "^0.8.0",
 		"autoprefixer-loader": "^1.0.0",
 		"style-loader": "^0.8.0",
+		"file-loader": "^0.8.1",
+		"expose-loader": "^0.6.0",
 
 		"jshint": "^2.5.5",
 		"gulp-jshint": "^1.8.4",

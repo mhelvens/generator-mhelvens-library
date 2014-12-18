@@ -30,9 +30,8 @@ function externalModule(modName, varName) {
 var INTERNAL_LIBRARIES = [];
 var EXTERNAL_LIBRARIES = [];
 var APPLICATIONS = [];
-
-fs.readdirSync('./modules')
-	.map(function (filename) { return fs.readFileSync('./modules/'+filename) })
+fs.readdirSync('./build-config/modules')
+	.map(function (filename) { return fs.readFileSync('./build-config/modules/'+filename) })
 	.map(JSON.parse)
 	.forEach(function (mod) {
 		if (mod.type === 'external-library') {
@@ -49,12 +48,31 @@ fs.readdirSync('./modules')
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+var AUTO_LOADERS = [];
+fs.readdirSync('./build-config/auto-loaders')
+	.map(function (filename) { return fs.readFileSync('./build-config/auto-loaders/'+filename) })
+	.map(JSON.parse)
+	.forEach(function (loader) {
+		loader.test = new RegExp(loader.test);
+		AUTO_LOADERS.push(loader);
+	});
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 /* tell Webpack where to find specific external library files */
 var WEBPACK_ALIAS = {};
 EXTERNAL_LIBRARIES.forEach(function (mod) {
 	WEBPACK_ALIAS[mod.name] = mod.dir + '/' + mod.file;
 });
 
+/* if the external module file is not enough, overwriting aliases can be set up */
+fs.readdirSync('./build-config/aliases')
+	.map(function (filename) { return fs.readFileSync('./build-config/aliases/'+filename) })
+	.map(JSON.parse)
+	.forEach(function (alias) {
+		WEBPACK_ALIAS[alias.from] = alias.to;
+	});
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -71,13 +89,10 @@ INTERNAL_LIBRARIES.concat(APPLICATIONS).forEach(function (m) {
 	/* Webpack configuration shared for both apps and libraries */
 	var commonConfig = {
 		devtool: 'inline-source-map',
-		module: {
-			loaders: [
-				{ test: /\.scss$/, loader: "style!css!autoprefixer!sass" },
-				{ test: /\.css$/, loader: "style!css!autoprefixer" },
-				{ test: /\.js/, loader: "traceur?script" }
-			]
-		}
+		module: { loaders: AUTO_LOADERS },
+		plugins: [
+			new webpack.optimize.DedupePlugin()
+		]
 	};
 
 	/* the webpack task for the internal module */
@@ -187,4 +202,4 @@ gulp.task('watch', function () {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-gulp.task('default', ['lint', 'build', 'watch']);
+gulp.task('default', ['lint', 'build', 'test', 'watch']);

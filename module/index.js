@@ -110,7 +110,8 @@ var MhelvensLibraryGenerator = yeoman.generators.Base.extend({
 
 						/* create module file */
 						var i = answers.path.lastIndexOf('/');
-						this.context.dir = this.context.name + '/' + answers.path.substring(0, i);
+						var subDir = answers.path.substring(0, i);
+						this.context.dir = this.context.name + (subDir.length > 0 ? '/' + subDir : '');
 						this.context.file = answers.path.substring(i+1);
 						this.template('_externalModule.json', 'modules/' + this.context.name + '.json', this.context);
 						done();

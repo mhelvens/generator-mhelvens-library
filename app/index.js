@@ -5,6 +5,7 @@ var path = require('path');
 var yeoman = require('yeoman-generator');
 var yosay = require('yosay');
 var _ = require('lodash');
+var fs = require('fs');
 
 var MhelvensLibraryGenerator = yeoman.generators.Base.extend({
 
@@ -43,7 +44,10 @@ var MhelvensLibraryGenerator = yeoman.generators.Base.extend({
 			this.dest.mkdir('dist');
 			this.dest.mkdir('src');
 			this.dest.mkdir('test');
-			this.dest.mkdir('modules');
+			this.dest.mkdir('build-config');
+			this.dest.mkdir('build-config/modules');
+			this.dest.mkdir('build-config/auto-loaders');
+			this.dest.mkdir('build-config/aliases');
 		},
 
 		projectFiles: function () {
@@ -56,6 +60,22 @@ var MhelvensLibraryGenerator = yeoman.generators.Base.extend({
 			this.template('_gulpfile.js', 'gulpfile.js', this);
 			this.template('_karma.conf.js', 'karma.conf.js', this);
 			this.template('_README.md', 'README.md', this);
+
+			fs.readdirSync(this.sourceRoot() + '/build-config/auto-loaders')
+				.map(function (filename) {
+					this.template(
+						'build-config/auto-loaders/' + filename,
+						'build-config/auto-loaders/' + filename.slice(1)
+					);
+				}.bind(this));
+
+			fs.readdirSync(this.sourceRoot() + '/build-config/aliases')
+				.map(function (filename) {
+					this.template(
+						'build-config/aliases/' + filename,
+						'build-config/aliases/' + filename.slice(1)
+					);
+				}.bind(this));
 		}
 	},
 

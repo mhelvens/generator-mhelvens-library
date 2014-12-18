@@ -1,6 +1,2 @@
-define(['./<%= name %>.scss'], function () {
-	'use strict';
+require('./<%= name %>.scss');
 
-
-
-});
