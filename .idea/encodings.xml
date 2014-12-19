@@ -1,15 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false">
-    <file url="file://$PROJECT_DIR$/../apinatomy-core/.idea/encodings.xml" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/../apinatomy-core/README.md" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/../apinatomy-core/build-config/modules/fma-model.json" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/../apinatomy-core/build-config/modules/p-tile-middleclick-to-maximize.json" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/../apinatomy-core/gulpfile.js" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/../apinatomy-core/src/p-three-d.js" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/../apinatomy-core/src/p-tile-click-to-open.js" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/../apinatomy-core/src/p-tile-skin.js" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/../apinatomy-core/src/p-transition-position-tracking.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/index.js" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/templates/_.editorconfig" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/templates/_.gitignore" charset="UTF-8" />
