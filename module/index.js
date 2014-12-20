@@ -14,8 +14,8 @@ var MhelvensLibraryGenerator = yeoman.generators.Base.extend({
 		this.context.config = this.config;
 
 		this.modules = {};
-		fs.readdirSync('./modules')
-			.map(function (filename) { return fs.readFileSync('./modules/'+filename) })
+		fs.readdirSync('./build-config/modules')
+			.map(function (filename) { return fs.readFileSync('./build-config/modules/'+filename) })
 			.map(JSON.parse)
 			.forEach(function (mod) { this.modules[mod.name] = mod }.bind(this));
 	},
@@ -90,7 +90,7 @@ var MhelvensLibraryGenerator = yeoman.generators.Base.extend({
 	writing: function () {
 		switch (this.context.type) {
 			case 'internal-library': {
-				this.template('_module.json', 'modules/' + this.context.name + '.json', this.context);
+				this.template('_module.json', 'build-config/modules/' + this.context.name + '.json', this.context);
 				this.template('_behavior.js', 'src/' + this.context.name + '.js', this.context);
 				this.template('_style.scss', 'src/' + this.context.name + '.scss', this.context);
 			} break;
@@ -113,14 +113,14 @@ var MhelvensLibraryGenerator = yeoman.generators.Base.extend({
 						var subDir = answers.path.substring(0, i);
 						this.context.dir = this.context.name + (subDir.length > 0 ? '/' + subDir : '');
 						this.context.file = answers.path.substring(i+1);
-						this.template('_externalModule.json', 'modules/' + this.context.name + '.json', this.context);
+						this.template('_externalModule.json', 'build-config/modules/' + this.context.name + '.json', this.context);
 						done();
 
 					}.bind(this));
 				}.bind(this));
 			} break;
 			case 'application': {
-				this.template('_application.json', 'modules/' + this.context.name + '.json', this.context);
+				this.template('_application.json', 'build-config/modules/' + this.context.name + '.json', this.context);
 				this.dest.mkdir('src/' + this.context.name);
 				this.template('_main.js', 'src/' + this.context.name + '/' + this.context.name + '.js', this.context);
 				this.template('_style.scss', 'src/' + this.context.name + '/' + this.context.name +  '.scss', this.context);
